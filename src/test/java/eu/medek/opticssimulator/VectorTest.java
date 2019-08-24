@@ -1,3 +1,5 @@
+package eu.medek.opticssimulator;
+
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -170,25 +172,34 @@ public class VectorTest {
     }
 
     @Test
-    public void fromHeadingStatic() {
-        Vector res = Vector.fromHeading(Math.PI/4d);
+    public void fromAngleStatic() {
+        Vector res = Vector.fromAngle(Math.PI/4d);
         Vector expected = new Vector(1,-1).normalize();
         assertTrue(res + " : " + expected, isSimilar(expected.x, res.x) && isSimilar(expected.y, res.y));
 
-        res = Vector.fromHeading(0);
+        res = Vector.fromAngle(0);
         expected = new Vector(1,0).normalize();
         assertTrue(res + " : " + expected, isSimilar(expected.x, res.x) && isSimilar(expected.y, res.y));
 
-        res = Vector.fromHeading(Math.PI/2d);
+        res = Vector.fromAngle(Math.PI/2d);
         expected = new Vector(0,-1).normalize();
         assertTrue(res + " : " + expected, isSimilar(expected.x, res.x) && isSimilar(expected.y, res.y));
 
-        res = Vector.fromHeading(5d/4d*Math.PI);
+        res = Vector.fromAngle(5d/4d*Math.PI);
         expected = new Vector(-1,1).normalize();
         assertTrue(res + " : " + expected, isSimilar(expected.x, res.x) && isSimilar(expected.y, res.y));
 
-        res = Vector.fromHeading(7d/4d*Math.PI);
+        res = Vector.fromAngle(7d/4d*Math.PI);
         expected = new Vector(1,1).normalize();
         assertTrue(res + " : " + expected, isSimilar(expected.x, res.x) && isSimilar(expected.y, res.y));
+    }
+
+    @Test
+    public void distStatic() {
+        Vector a = new Vector(3,5);
+        Vector b = new Vector(6,9);
+        double expected = 5;
+        assertTrue(isSimilar(Vector.dist(a,b), expected));
+        assertTrue(isSimilar(Vector.dist(b,a), expected));
     }
 }

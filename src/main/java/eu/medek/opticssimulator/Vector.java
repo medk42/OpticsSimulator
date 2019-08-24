@@ -1,3 +1,5 @@
+package eu.medek.opticssimulator;
+
 public class Vector {
 
     // Variables
@@ -6,10 +8,6 @@ public class Vector {
 
 
     // Constructors
-    @Override
-    public String toString() {
-        return "x: " + x + " y: " + y;
-    }
 
     public Vector(double x, double y) {
         this.x = x;
@@ -27,6 +25,11 @@ public class Vector {
 
 
     // Methods
+    @Override
+    public String toString() {
+        return "x: " + x + " y: " + y;
+    }
+
     public Vector set(double x, double y) {
         this.x = x;
         this.y = y;
@@ -80,7 +83,7 @@ public class Vector {
     }
 
     public Vector rotate(double angle) {
-        this.set(Vector.fromHeading(this.heading() + angle).mult(this.mag()));
+        this.set(Vector.fromAngle(this.heading() + angle).mult(this.mag()));
         return this;
     }
 
@@ -95,7 +98,13 @@ public class Vector {
         return new Vector(v).sub(u);
     }
 
-    public static Vector fromHeading(double heading) {
-        return new Vector(Math.cos(heading), -Math.sin(heading));
+    public static Vector fromAngle(double angle) {
+        return new Vector(Math.cos(angle), -Math.sin(angle));
+    }
+
+    public static double dist(Vector a, Vector b) {
+        double diffX = a.x - b.x;
+        double diffY = a.y - b.y;
+        return Math.sqrt((diffX * diffX) + (diffY * diffY));
     }
 }

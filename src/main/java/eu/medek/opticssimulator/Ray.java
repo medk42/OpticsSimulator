@@ -1,3 +1,5 @@
+package eu.medek.opticssimulator;
+
 public class Ray {
 
     // Variables
