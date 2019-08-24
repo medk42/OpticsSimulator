@@ -5,25 +5,10 @@ import eu.medek.opticssimulator.Response;
 import eu.medek.opticssimulator.Vector;
 import org.junit.Test;
 
+import static eu.medek.opticssimulator.Checks.assertVector;
 import static org.junit.Assert.*;
 
 public class BlockerLineTest {
-
-    private static final double THRESHOLD = 0.00001;
-
-    private static void assertDouble(double expected, double actual) {
-        if (Math.abs(expected-actual) < THRESHOLD) assert true;
-        else {
-            System.out.println("Wrong value!");
-            System.out.println("Expected: " + expected + " Actual: " + actual);
-            assert false;
-        }
-    }
-
-    private static void assertVector(Vector expected, Vector actual) {
-        assertDouble(expected.x, actual.x);
-        assertDouble(expected.y, actual.y);
-    }
 
     @Test
     public void getImpactResult() {

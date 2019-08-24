@@ -9,7 +9,7 @@ public abstract class LineSegment implements Reflactable {
     protected Vector pointA, pointB;
 
     /**
-     * Creates a new Blocker using vectors passed as references
+     * Creates a new LineSegment using vectors passed as references
      */
     public LineSegment(Vector pointA, Vector pointB) {
         this.pointA = pointA;
@@ -17,7 +17,7 @@ public abstract class LineSegment implements Reflactable {
     }
 
     /**
-     * Creates a new BlockerLine with the specified coordinates used as endpoints.
+     * Creates a new LineSegment with the specified coordinates used as endpoints.
      */
     public LineSegment(double x1, double y1, double x2, double y2) {
         this(new Vector(x1, y1), new Vector(x2, y2));

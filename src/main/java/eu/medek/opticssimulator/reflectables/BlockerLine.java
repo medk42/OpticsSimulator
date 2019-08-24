@@ -10,7 +10,7 @@ import java.util.LinkedList;
 public class BlockerLine extends LineSegment {
 
     /**
-     * Creates a new Blocker using vectors passed as references
+     * Creates a new BlockerLine using vectors passed as references
      */
     public BlockerLine(Vector pointA, Vector pointB) {
         super(pointA, pointB);
