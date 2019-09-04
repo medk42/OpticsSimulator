@@ -57,7 +57,7 @@ public class RayTest {
 
     @Test
     public void setStrength() {
-        Ray ray, expected;
+        Ray ray;
 
         ray = new Ray(1,2,3,4);
 

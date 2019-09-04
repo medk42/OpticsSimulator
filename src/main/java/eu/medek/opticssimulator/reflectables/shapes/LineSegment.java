@@ -6,12 +6,12 @@ import eu.medek.opticssimulator.Vector;
 
 public abstract class LineSegment implements Reflactable {
 
-    protected Vector pointA, pointB;
+    final protected Vector pointA, pointB;
 
     /**
      * Creates a new LineSegment using vectors passed as references
      */
-    public LineSegment(Vector pointA, Vector pointB) {
+    protected LineSegment(Vector pointA, Vector pointB) {
         this.pointA = pointA;
         this.pointB = pointB;
     }
@@ -19,8 +19,16 @@ public abstract class LineSegment implements Reflactable {
     /**
      * Creates a new LineSegment with the specified coordinates used as endpoints.
      */
-    public LineSegment(double x1, double y1, double x2, double y2) {
+    protected LineSegment(double x1, double y1, double x2, double y2) {
         this(new Vector(x1, y1), new Vector(x2, y2));
+    }
+
+    public Vector getPointA() {
+        return pointA;
+    }
+
+    public Vector getPointB() {
+        return pointB;
     }
 
     /**

@@ -5,10 +5,10 @@ import java.util.List;
 public class Response {
 
     // Variables
-    private boolean impact;
-    private Vector pointOfImpact;
-    private Reflactable objectHit;
-    private List<Ray> resultingRays;
+    final private boolean impact;
+    final private Vector pointOfImpact;
+    final private Reflactable objectHit;
+    final private List<Ray> resultingRays;
 
 
 

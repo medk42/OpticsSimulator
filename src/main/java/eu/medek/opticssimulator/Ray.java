@@ -1,5 +1,8 @@
 package eu.medek.opticssimulator;
 
+import java.util.LinkedList;
+import java.util.List;
+
 public class Ray {
 
     // Variables
@@ -9,6 +12,7 @@ public class Ray {
      */
     private double angle;
     private double strength;
+    final private List<Reflactable> ignoredReflactables;
 
 
     // Constructors
@@ -16,6 +20,7 @@ public class Ray {
         this.position = position;
         this.angle = angle;
         this.strength = strength;
+        ignoredReflactables = new LinkedList<>();
     }
 
     public Ray(double x, double y, double angle, double strength) {
@@ -57,10 +62,36 @@ public class Ray {
         return strength;
     }
 
+    public List<Reflactable> getIgnoredReflactables() {
+        return ignoredReflactables;
+    }
+
 
 
     // Methods
     public void lookAt(Vector v) {
         this.angle = Vector.sub(v, this.position).heading();
+    }
+
+    /**
+     * Checks all Reflactable objects and returns Response object containing the closest point of impact
+     * @param reflactables Reflactable objects to check
+     * @return Response object containing the closest point of impact
+     */
+    public Response solveReflactables(List<Reflactable> reflactables) {
+        Response closest = null;
+        reflactables = new LinkedList<>(reflactables);
+        reflactables.removeAll(ignoredReflactables);
+        for (Reflactable reflactable : reflactables) {
+            Response response = reflactable.getImpactResult(this);
+            if (response.getImpact()) {
+                if (closest == null || Vector.dist(response.getPointOfImpact(), this.position) < Vector.dist(closest.getPointOfImpact(), this.position)) {
+                    closest = response;
+                }
+            }
+        }
+
+        if (closest == null) return new Response();
+        return closest;
     }
 }

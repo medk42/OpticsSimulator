@@ -33,7 +33,9 @@ public class MirrorLine extends LineSegment {
             double resultingAngle = 2*segmentAngle - ray.getAngle();
 
             List<Ray> resultingRays = new LinkedList<>();
-            resultingRays.add(new Ray(intersection, resultingAngle, 1));
+            Ray resultingRay = new Ray(intersection, resultingAngle, ray.getStrength());
+            resultingRay.getIgnoredReflactables().add(this);
+            resultingRays.add(resultingRay);
             return new Response(intersection, this, resultingRays);
         }
     }
