@@ -1,7 +1,8 @@
 package eu.medek.opticssimulator;
 
-import eu.medek.opticssimulator.reflectables.IdealLensLine;
-import eu.medek.opticssimulator.reflectables.MirrorLine;
+import eu.medek.opticssimulator.reflectables.IdealCurvedMirror;
+import eu.medek.opticssimulator.reflectables.IdealLens;
+import eu.medek.opticssimulator.reflectables.Mirror;
 import processing.core.PApplet;
 import processing.event.KeyEvent;
 import processing.event.MouseEvent;
@@ -32,13 +33,13 @@ public class ManualTests extends PApplet {
         reflactables = new ArrayList<>();
 
         //CHANGE FOR TESTING DIFFERENT COMPONENTS
-        reflactables.add(new IdealLensLine(objStart, objEnd, 50));
+        reflactables.add(new IdealCurvedMirror(objStart, objEnd, 50));
         //END CHANGE
 
-        reflactables.add(new MirrorLine(0,0,width,0));
-        reflactables.add(new MirrorLine(0,0,0,height));
-        reflactables.add(new MirrorLine(width,height,width,0));
-        reflactables.add(new MirrorLine(width,height,0,height));
+        reflactables.add(new Mirror(0,0,width,0));
+        reflactables.add(new Mirror(0,0,0,height));
+        reflactables.add(new Mirror(width,height,width,0));
+        reflactables.add(new Mirror(width,height,0,height));
     }
 
     public void draw() {
@@ -46,14 +47,14 @@ public class ManualTests extends PApplet {
         fill(255);
 
         for (Reflactable reflactable : reflactables) {
-            if (reflactable instanceof IdealLensLine) {
-                Vector pointA = ((IdealLensLine) reflactable).getPointA();
-                Vector pointB = ((IdealLensLine) reflactable).getPointB();
+            if (reflactable instanceof IdealLens) {
+                Vector pointA = ((IdealLens) reflactable).getPointA();
+                Vector pointB = ((IdealLens) reflactable).getPointB();
                 fill(255);
                 ellipse((float) pointA.x, (float) pointA.y, 30, 30);
                 ellipse((float) pointB.x, (float) pointB.y, 30, 30);
                 Vector center = Vector.add(pointA, Vector.sub(pointB, pointA).div(2));
-                Vector dir = Vector.sub(pointB, pointA).normalize().rotate(-Math.PI / 2).mult(((IdealLensLine) reflactable).getFocusDistance());
+                Vector dir = Vector.sub(pointB, pointA).normalize().rotate(-Math.PI / 2).mult(((IdealLens) reflactable).getFocusDistance());
                 Vector focus = Vector.add(center, dir);
                 Vector focus2 = Vector.sub(center, dir);
                 ellipse((float) focus.x, (float) focus.y, 8, 8);
@@ -83,7 +84,7 @@ public class ManualTests extends PApplet {
         }
         line((float) objStart.x, (float) objStart.y, (float) objEnd.x, (float) objEnd.y);
 
-        solveRay(ray, 10);
+        solveRay(ray, 2);
     }
 
     private void solveRay(Ray ray, int limit) {
@@ -124,8 +125,8 @@ public class ManualTests extends PApplet {
 
     public void mouseWheel(MouseEvent event) {
         for (Reflactable reflactable : reflactables) {
-            if (reflactable instanceof IdealLensLine) {
-                IdealLensLine converted = (IdealLensLine) reflactable;
+            if (reflactable instanceof IdealLens) {
+                IdealLens converted = (IdealLens) reflactable;
                 if (converted.getFocusDistance()+event.getCount() != 0) converted.setFocusDistance(converted.getFocusDistance()+event.getCount());
                 else converted.setFocusDistance(converted.getFocusDistance()+event.getCount()*2);
             }

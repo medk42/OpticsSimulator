@@ -8,27 +8,27 @@ import eu.medek.opticssimulator.reflectables.shapes.LineSegment;
 import java.util.LinkedList;
 import java.util.List;
 
-public class IdealLensLine extends LineSegment {
+public class IdealLens extends LineSegment {
     private static final double HALF_PI = Math.PI / 2;
     private static final double TWO_PI = Math.PI * 2;
 
     private double focusDistance;
 
     /**
-     * Creates a new MirrorLine using vectors passed as references
+     * Creates a new Mirror using vectors passed as references
      * @exception RuntimeException throws runtime exception if focusDistance is set to 0
      */
-    public IdealLensLine(Vector pointA, Vector pointB, double focusDistance) {
+    public IdealLens(Vector pointA, Vector pointB, double focusDistance) {
         super(pointA, pointB);
         if (focusDistance == 0) throw new RuntimeException("Focus distance cannot be 0!");
         this.focusDistance = focusDistance;
     }
 
     /**
-     * Creates a new MirrorLine with the specified coordinates used as endpoints.
+     * Creates a new Mirror with the specified coordinates used as endpoints.
      * @exception RuntimeException throws runtime exception if focusDistance is set to 0
      */
-    public IdealLensLine(double x1, double y1, double x2, double y2, double focusDistance) {
+    public IdealLens(double x1, double y1, double x2, double y2, double focusDistance) {
         super(x1, y1, x2, y2);
         if (focusDistance == 0) throw new RuntimeException("Focus distance cannot be 0!");
         this.focusDistance = focusDistance;
@@ -50,7 +50,7 @@ public class IdealLensLine extends LineSegment {
     /**
      * Make the angle in range -PI to +PI
      */
-    private double normalizeAngle(double angle) {
+    double normalizeAngle(double angle) {
         double res = angle % TWO_PI;
         if (res > Math.PI) res -= TWO_PI;
         else if (res < -Math.PI) res += TWO_PI;

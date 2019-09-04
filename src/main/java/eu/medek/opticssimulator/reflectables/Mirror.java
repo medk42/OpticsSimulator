@@ -8,19 +8,19 @@ import eu.medek.opticssimulator.reflectables.shapes.LineSegment;
 import java.util.LinkedList;
 import java.util.List;
 
-public class MirrorLine extends LineSegment {
+public class Mirror extends LineSegment {
 
     /**
-     * Creates a new MirrorLine using vectors passed as references
+     * Creates a new Mirror using vectors passed as references
      */
-    public MirrorLine(Vector pointA, Vector pointB) {
+    public Mirror(Vector pointA, Vector pointB) {
         super(pointA, pointB);
     }
 
     /**
-     * Creates a new MirrorLine with the specified coordinates used as endpoints.
+     * Creates a new Mirror with the specified coordinates used as endpoints.
      */
-    public MirrorLine(double x1, double y1, double x2, double y2) {
+    public Mirror(double x1, double y1, double x2, double y2) {
         super(x1, y1, x2, y2);
     }
 
