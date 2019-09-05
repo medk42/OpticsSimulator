@@ -1,5 +1,8 @@
 package eu.medek.opticssimulator;
 
+import eu.medek.opticssimulator.rays.Ray;
+import eu.medek.opticssimulator.reflectables.Reflactable;
+
 import java.util.List;
 
 public class Response {

@@ -1,6 +1,6 @@
 package eu.medek.opticssimulator.reflectables;
 
-import eu.medek.opticssimulator.Ray;
+import eu.medek.opticssimulator.rays.Ray;
 import eu.medek.opticssimulator.Response;
 import eu.medek.opticssimulator.Vector;
 import eu.medek.opticssimulator.reflectables.shapes.LineSegment;

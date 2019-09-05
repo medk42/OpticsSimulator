@@ -1,8 +1,10 @@
 package eu.medek.opticssimulator;
 
+import eu.medek.opticssimulator.rays.Ray;
 import eu.medek.opticssimulator.reflectables.IdealCurvedMirror;
 import eu.medek.opticssimulator.reflectables.IdealLens;
 import eu.medek.opticssimulator.reflectables.Mirror;
+import eu.medek.opticssimulator.reflectables.Reflactable;
 import processing.core.PApplet;
 import processing.event.KeyEvent;
 import processing.event.MouseEvent;
@@ -10,7 +12,7 @@ import processing.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ManualTests extends PApplet {
+public class ManualTests1 extends PApplet {
 
     private Vector rayStart, rayEnd;
 
@@ -136,6 +138,6 @@ public class ManualTests extends PApplet {
 
 
     public static void main(String[] args) {
-        PApplet.main("eu.medek.opticssimulator.ManualTests");
+        PApplet.main("eu.medek.opticssimulator.ManualTests1");
     }
 }

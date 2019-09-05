@@ -1,6 +1,6 @@
 package eu.medek.opticssimulator.reflectables.shapes;
 
-import eu.medek.opticssimulator.Ray;
+import eu.medek.opticssimulator.rays.Ray;
 import eu.medek.opticssimulator.Vector;
 import eu.medek.opticssimulator.reflectables.BlockerLine;
 import org.junit.Test;

@@ -1,15 +1,18 @@
 package eu.medek.opticssimulator.reflectables.shapes;
 
-import eu.medek.opticssimulator.Ray;
-import eu.medek.opticssimulator.Reflactable;
+import eu.medek.opticssimulator.rays.Ray;
+import eu.medek.opticssimulator.reflectables.Reflactable;
 import eu.medek.opticssimulator.Vector;
 
 public abstract class LineSegment implements Reflactable {
 
+    // Variables
     final protected Vector pointA, pointB;
 
+
+    // Constructors
     /**
-     * Creates a new LineSegment using vectors passed as references
+     * Create a new LineSegment using vectors passed as references
      */
     protected LineSegment(Vector pointA, Vector pointB) {
         this.pointA = pointA;
@@ -17,12 +20,14 @@ public abstract class LineSegment implements Reflactable {
     }
 
     /**
-     * Creates a new LineSegment with the specified coordinates used as endpoints.
+     * Create a new LineSegment with the specified coordinates used as endpoints.
      */
     protected LineSegment(double x1, double y1, double x2, double y2) {
         this(new Vector(x1, y1), new Vector(x2, y2));
     }
 
+
+    // Getters
     public Vector getPointA() {
         return pointA;
     }
@@ -31,6 +36,8 @@ public abstract class LineSegment implements Reflactable {
         return pointB;
     }
 
+
+    // Methods
     /**
      * Get the point of intersection between the ray and this object using line-line intersection (https://en.wikipedia.org/wiki/Line%E2%80%93line_intersection)
      * @param ray ray to be used

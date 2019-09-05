@@ -1,4 +1,8 @@
-package eu.medek.opticssimulator;
+package eu.medek.opticssimulator.rays;
+
+import eu.medek.opticssimulator.reflectables.Reflactable;
+import eu.medek.opticssimulator.Response;
+import eu.medek.opticssimulator.Vector;
 
 import java.util.LinkedList;
 import java.util.List;

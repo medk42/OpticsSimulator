@@ -1,5 +1,6 @@
 package eu.medek.opticssimulator;
 
+import eu.medek.opticssimulator.rays.Ray;
 import eu.medek.opticssimulator.reflectables.BlockerLine;
 import org.junit.Test;
 

@@ -1,6 +1,6 @@
 package eu.medek.opticssimulator.reflectables;
 
-import eu.medek.opticssimulator.Ray;
+import eu.medek.opticssimulator.rays.Ray;
 import eu.medek.opticssimulator.Response;
 import eu.medek.opticssimulator.Vector;
 import eu.medek.opticssimulator.reflectables.shapes.LineSegment;
@@ -57,6 +57,9 @@ public class IdealLens extends LineSegment {
         return res;
     }
 
+    /**
+     * Calculates the resulting ray using ideal lens equation (https://www.sciencedirect.com/science/article/pii/S0030402615000364#eq0010)
+     */
     @Override
     public Response getImpactResult(Ray ray) {
         Vector intersection = getIntersection(ray);
