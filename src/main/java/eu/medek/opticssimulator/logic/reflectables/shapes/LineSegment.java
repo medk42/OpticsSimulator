@@ -1,8 +1,8 @@
-package eu.medek.opticssimulator.reflectables.shapes;
+package eu.medek.opticssimulator.logic.reflectables.shapes;
 
-import eu.medek.opticssimulator.rays.Ray;
-import eu.medek.opticssimulator.reflectables.Reflactable;
-import eu.medek.opticssimulator.Vector;
+import eu.medek.opticssimulator.logic.rays.Ray;
+import eu.medek.opticssimulator.logic.reflectables.Reflactable;
+import eu.medek.opticssimulator.logic.Vector;
 
 public abstract class LineSegment implements Reflactable {
 

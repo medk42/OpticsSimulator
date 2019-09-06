@@ -1,8 +1,8 @@
-package eu.medek.opticssimulator.reflectables;
+package eu.medek.opticssimulator.logic.reflectables;
 
-import eu.medek.opticssimulator.rays.Ray;
-import eu.medek.opticssimulator.Response;
-import eu.medek.opticssimulator.Vector;
+import eu.medek.opticssimulator.logic.rays.Ray;
+import eu.medek.opticssimulator.logic.Response;
+import eu.medek.opticssimulator.logic.Vector;
 
 public class IdealCurvedMirror extends IdealLens {
 

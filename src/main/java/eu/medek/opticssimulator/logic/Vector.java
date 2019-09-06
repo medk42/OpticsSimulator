@@ -1,4 +1,4 @@
-package eu.medek.opticssimulator;
+package eu.medek.opticssimulator.logic;
 
 public class Vector {
 

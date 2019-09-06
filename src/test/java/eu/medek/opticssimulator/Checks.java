@@ -1,5 +1,7 @@
 package eu.medek.opticssimulator;
 
+import eu.medek.opticssimulator.logic.Vector;
+
 public class Checks {
     private static final double THRESHOLD = 0.00001;
 

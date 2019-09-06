@@ -1,66 +1,52 @@
-package eu.medek.opticssimulator;
+package eu.medek.opticssimulator.logic;
 
-import eu.medek.opticssimulator.rays.Beam;
-import eu.medek.opticssimulator.rays.DensityListener;
-import eu.medek.opticssimulator.rays.PointSource;
-import eu.medek.opticssimulator.rays.Ray;
-import eu.medek.opticssimulator.reflectables.*;
+import eu.medek.opticssimulator.logic.rays.Ray;
+import eu.medek.opticssimulator.logic.reflectables.IdealCurvedMirror;
+import eu.medek.opticssimulator.logic.reflectables.IdealLens;
+import eu.medek.opticssimulator.logic.reflectables.Mirror;
+import eu.medek.opticssimulator.logic.reflectables.Reflactable;
 import processing.core.PApplet;
 import processing.event.KeyEvent;
 import processing.event.MouseEvent;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
-/**
- * For testing beam and point source
- */
-public class ManualRaysPackage extends PApplet {
+public class ManualLineSegmentChildren extends PApplet {
+
+    private Vector rayStart, rayEnd;
 
     private Vector objStart, objEnd;
 
-    private Beam beam;
-    private PointSource pointSource;
+    private Ray ray;
     private List<Reflactable> reflactables;
-    private double density = 0.1d;
 
-    private List<DensityListener> densityListeners;
-
-    private boolean keyReleased = true, mouseLeftReleased = true, mouseRightReleased = true;
-
-    private double ZOOM_AMOUNT = 0.9d;
+    private boolean keyReleased = true;
 
     public void setup() {
         size(640, 480);
-
-        reflactables = new ArrayList<>();
-        densityListeners = new LinkedList<>();
+        rayStart = new Vector(0,0);
+        rayEnd = new Vector(1, 1);
 
         objStart = new Vector(0,0);
         objEnd = new Vector(100,100);
 
-        beam = new Beam();
-        pointSource = new PointSource();
-        densityListeners.add(beam);
-        densityListeners.add(pointSource);
-
+        ray = new Ray(rayStart, -Math.PI/4d, 1d);
+        reflactables = new ArrayList<>();
 
         //CHANGE FOR TESTING DIFFERENT COMPONENTS
-        reflactables.add(new IdealLens(objStart, objEnd, 50));
+        reflactables.add(new IdealCurvedMirror(objStart, objEnd, 50));
         //END CHANGE
 
-        reflactables.add(new BlockerLine(0,0,width,0));
-        reflactables.add(new BlockerLine(10,0,10,height));
-        reflactables.add(new BlockerLine(width,height,width,0));
-        reflactables.add(new BlockerLine(width,height,0,height));
+        reflactables.add(new Mirror(0,0,width,0));
+        reflactables.add(new Mirror(0,0,0,height));
+        reflactables.add(new Mirror(width,height,width,0));
+        reflactables.add(new Mirror(width,height,0,height));
     }
 
     public void draw() {
         background(0);
         fill(255);
-
-
 
         for (Reflactable reflactable : reflactables) {
             if (reflactable instanceof IdealLens) {
@@ -79,14 +65,18 @@ public class ManualRaysPackage extends PApplet {
             }
         }
 
-        stroke(100, 100, 200);
-        strokeWeight(2);
-        line((float) beam.getPointA().x, (float) beam.getPointA().y, (float) beam.getPointB().x, (float) beam.getPointB().y);
 
-        noStroke();
-        fill(100, 200, 200);
-        ellipse((float) pointSource.getPosition().x, (float) pointSource.getPosition().y, 30, 30);
+        rayEnd.x = mouseX;
+        rayEnd.y = mouseY;
+        Vector direction = Vector.sub(rayEnd, rayStart);
+        ray.setAngle(direction.heading());
+        direction.normalize();
+        direction.mult(1000);
+        rayEnd = Vector.add(rayStart, direction);
 
+        strokeWeight(1);
+        stroke(100);
+        line((float) rayStart.x, (float) rayStart.y, (float) rayEnd.x, (float) rayEnd.y);
 
         strokeWeight(3);
         stroke(255);
@@ -96,17 +86,7 @@ public class ManualRaysPackage extends PApplet {
         }
         line((float) objStart.x, (float) objStart.y, (float) objEnd.x, (float) objEnd.y);
 
-        if (!mouseLeftReleased) {
-            beam.setPointA(new Vector(mouseX, mouseY));
-        }
-        if (!mouseRightReleased) {
-            pointSource.getPosition().x = mouseX;
-            pointSource.getPosition().y = mouseY;
-        }
-
-        int limit = 2;
-        for (Ray ray : beam.getRays()) solveRay(ray, limit);
-        for (Ray ray : pointSource.getRays()) solveRay(ray, limit);
+        solveRay(ray, 2);
     }
 
     private void solveRay(Ray ray, int limit) {
@@ -125,23 +105,8 @@ public class ManualRaysPackage extends PApplet {
     }
 
     public void mousePressed() {
-        if (mouseButton == LEFT) {
-            if (mouseLeftReleased) {
-                beam.setPointB(new Vector(mouseX, mouseY));
-                mouseLeftReleased = false;
-            }
-        } else if (mouseButton == RIGHT) {
-            mouseRightReleased = false;
-        }
-    }
-
-    public void mouseReleased() {
-        if (mouseButton == LEFT) {
-            beam.setPointA(new Vector(mouseX, mouseY));
-            mouseLeftReleased = true;
-        } else if (mouseButton == RIGHT) {
-            mouseRightReleased = true;
-        }
+        rayStart.x = mouseX;
+        rayStart.y = mouseY;
     }
 
     public void keyPressed(KeyEvent event) {
@@ -168,16 +133,11 @@ public class ManualRaysPackage extends PApplet {
                 else converted.setFocusDistance(converted.getFocusDistance()+event.getCount()*2);
             }
         }
-
-        density *= Math.pow(ZOOM_AMOUNT, event.getCount());
-        for (DensityListener listener : densityListeners) {
-            listener.setDensity(density);
-        }
     }
 
 
 
     public static void main(String[] args) {
-        PApplet.main("eu.medek.opticssimulator.ManualRaysPackage");
+        PApplet.main("eu.medek.opticssimulator.logic.ManualLineSegmentChildren");
     }
 }

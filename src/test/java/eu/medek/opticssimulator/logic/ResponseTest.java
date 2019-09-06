@@ -1,7 +1,7 @@
-package eu.medek.opticssimulator;
+package eu.medek.opticssimulator.logic;
 
-import eu.medek.opticssimulator.rays.Ray;
-import eu.medek.opticssimulator.reflectables.BlockerLine;
+import eu.medek.opticssimulator.logic.rays.Ray;
+import eu.medek.opticssimulator.logic.reflectables.BlockerLine;
 import org.junit.Test;
 
 import java.util.LinkedList;

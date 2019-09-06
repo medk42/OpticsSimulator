@@ -1,7 +1,7 @@
-package eu.medek.opticssimulator;
+package eu.medek.opticssimulator.logic;
 
-import eu.medek.opticssimulator.rays.Ray;
-import eu.medek.opticssimulator.reflectables.Reflactable;
+import eu.medek.opticssimulator.logic.rays.Ray;
+import eu.medek.opticssimulator.logic.reflectables.Reflactable;
 
 import java.util.List;
 

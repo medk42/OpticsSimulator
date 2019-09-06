@@ -1,6 +1,6 @@
-package eu.medek.opticssimulator.rays;
+package eu.medek.opticssimulator.logic.rays;
 
-import eu.medek.opticssimulator.Vector;
+import eu.medek.opticssimulator.logic.Vector;
 
 import java.util.LinkedList;
 import java.util.List;

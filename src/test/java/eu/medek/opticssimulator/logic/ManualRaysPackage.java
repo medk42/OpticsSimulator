@@ -1,55 +1,66 @@
-package eu.medek.opticssimulator;
+package eu.medek.opticssimulator.logic;
 
-import eu.medek.opticssimulator.rays.Ray;
-import eu.medek.opticssimulator.reflectables.*;
+import eu.medek.opticssimulator.logic.rays.Beam;
+import eu.medek.opticssimulator.logic.rays.DensityListener;
+import eu.medek.opticssimulator.logic.rays.PointSource;
+import eu.medek.opticssimulator.logic.rays.Ray;
+import eu.medek.opticssimulator.logic.reflectables.*;
 import processing.core.PApplet;
 import processing.event.KeyEvent;
 import processing.event.MouseEvent;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
- * For testing CircleGlass
+ * For testing beam and point source
  */
-public class ManualCircleGlass extends PApplet {
-
-    private Vector rayStart, rayEnd;
+public class ManualRaysPackage extends PApplet {
 
     private Vector objStart, objEnd;
 
-    private Ray ray;
+    private Beam beam;
+    private PointSource pointSource;
     private List<Reflactable> reflactables;
+    private double density = 0.1d;
 
-    private static final double CHANGE_AMOUNT = 0.9d;
+    private List<DensityListener> densityListeners;
 
-    private boolean keyReleased = true;
+    private boolean keyReleased = true, mouseLeftReleased = true, mouseRightReleased = true;
+
+    private double ZOOM_AMOUNT = 0.9d;
 
     public void setup() {
         size(640, 480);
-        //frameRate(2);
-        rayStart = new Vector(0,0);
-        rayEnd = new Vector(1, 1);
+
+        reflactables = new ArrayList<>();
+        densityListeners = new LinkedList<>();
 
         objStart = new Vector(0,0);
         objEnd = new Vector(100,100);
 
-        ray = new Ray(rayStart, -Math.PI/4d, 1d);
-        reflactables = new ArrayList<>();
+        beam = new Beam();
+        pointSource = new PointSource();
+        densityListeners.add(beam);
+        densityListeners.add(pointSource);
 
-        reflactables.add(new CircleGlass(objStart, Vector.dist(objStart, objEnd), 1.2d));
 
-        reflactables.add(new Mirror(0,0,width,0));
-        reflactables.add(new Mirror(0,0,0,height));
-        reflactables.add(new Mirror(width,height,width,0));
-        reflactables.add(new Mirror(width,height,0,height));
+        //CHANGE FOR TESTING DIFFERENT COMPONENTS
+        reflactables.add(new IdealLens(objStart, objEnd, 50));
+        //END CHANGE
+
+        reflactables.add(new BlockerLine(0,0,width,0));
+        reflactables.add(new BlockerLine(10,0,10,height));
+        reflactables.add(new BlockerLine(width,height,width,0));
+        reflactables.add(new BlockerLine(width,height,0,height));
     }
 
     public void draw() {
-        System.out.println(frameRate);
-
         background(0);
         fill(255);
+
+
 
         for (Reflactable reflactable : reflactables) {
             if (reflactable instanceof IdealLens) {
@@ -68,40 +79,40 @@ public class ManualCircleGlass extends PApplet {
             }
         }
 
+        stroke(100, 100, 200);
+        strokeWeight(2);
+        line((float) beam.getPointA().x, (float) beam.getPointA().y, (float) beam.getPointB().x, (float) beam.getPointB().y);
 
-        rayEnd.x = mouseX;
-        rayEnd.y = mouseY;
-        Vector direction = Vector.sub(rayEnd, rayStart);
-        ray.setAngle(direction.heading());
-        direction.normalize();
-        direction.mult(1000);
-        rayEnd = Vector.add(rayStart, direction);
+        noStroke();
+        fill(100, 200, 200);
+        ellipse((float) pointSource.getPosition().x, (float) pointSource.getPosition().y, 30, 30);
 
-        strokeWeight(1);
-        stroke(100);
-        line((float) rayStart.x, (float) rayStart.y, (float) rayEnd.x, (float) rayEnd.y);
 
-        strokeWeight(1);
+        strokeWeight(3);
         stroke(255);
-        fill(80,40,230, (float) ((1d-1d/((CircleGlass) reflactables.get(0)).getRefractiveIndex()) * 255d));
         if (!keyReleased) {
             objEnd.x = mouseX;
             objEnd.y = mouseY;
-            ((CircleGlass) reflactables.get(0)).setRadius(Vector.dist(objStart, objEnd));
         }
-        double radius = ((CircleGlass) reflactables.get(0)).getRadius();
-        ellipse((float) objStart.x, (float) objStart.y, (float) radius*2, (float) radius*2);
+        line((float) objStart.x, (float) objStart.y, (float) objEnd.x, (float) objEnd.y);
 
-        solveRay(ray, 5);
+        if (!mouseLeftReleased) {
+            beam.setPointA(new Vector(mouseX, mouseY));
+        }
+        if (!mouseRightReleased) {
+            pointSource.getPosition().x = mouseX;
+            pointSource.getPosition().y = mouseY;
+        }
+
+        int limit = 2;
+        for (Ray ray : beam.getRays()) solveRay(ray, limit);
+        for (Ray ray : pointSource.getRays()) solveRay(ray, limit);
     }
 
     private void solveRay(Ray ray, int limit) {
         if (limit == 0) return;
         Response response = ray.solveReflactables(reflactables);
         if (response.getImpact()) {
-            strokeWeight(1);
-            stroke(255, 50);
-            line((float) objStart.x, (float) objStart.y, (float) response.getPointOfImpact().x, (float) response.getPointOfImpact().y);
             strokeWeight(2);
             stroke(200,100,100,(float) ray.getStrength()*255);
             line((float) ray.getPosition().x, (float) ray.getPosition().y, (float) response.getPointOfImpact().x, (float) response.getPointOfImpact().y);
@@ -114,8 +125,23 @@ public class ManualCircleGlass extends PApplet {
     }
 
     public void mousePressed() {
-        rayStart.x = mouseX;
-        rayStart.y = mouseY;
+        if (mouseButton == LEFT) {
+            if (mouseLeftReleased) {
+                beam.setPointB(new Vector(mouseX, mouseY));
+                mouseLeftReleased = false;
+            }
+        } else if (mouseButton == RIGHT) {
+            mouseRightReleased = false;
+        }
+    }
+
+    public void mouseReleased() {
+        if (mouseButton == LEFT) {
+            beam.setPointA(new Vector(mouseX, mouseY));
+            mouseLeftReleased = true;
+        } else if (mouseButton == RIGHT) {
+            mouseRightReleased = true;
+        }
     }
 
     public void keyPressed(KeyEvent event) {
@@ -130,7 +156,6 @@ public class ManualCircleGlass extends PApplet {
         if (event.getKey() == ' ') {
             objEnd.x = mouseX;
             objEnd.y = mouseY;
-            ((CircleGlass) reflactables.get(0)).setRadius(Vector.dist(objStart, objEnd));
             keyReleased = true;
         }
     }
@@ -141,20 +166,18 @@ public class ManualCircleGlass extends PApplet {
                 IdealLens converted = (IdealLens) reflactable;
                 if (converted.getFocusDistance()+event.getCount() != 0) converted.setFocusDistance(converted.getFocusDistance()+event.getCount());
                 else converted.setFocusDistance(converted.getFocusDistance()+event.getCount()*2);
-            } else if (reflactable instanceof  CircleGlass) {
-                CircleGlass converted = (CircleGlass) reflactable;
-                double resultingValue = (converted.getRefractiveIndex() - 1) * Math.pow(CHANGE_AMOUNT, event.getCount()) + 1;
-                converted.setRefractiveIndex(resultingValue);
-                System.out.println(resultingValue);
             }
         }
 
-
+        density *= Math.pow(ZOOM_AMOUNT, event.getCount());
+        for (DensityListener listener : densityListeners) {
+            listener.setDensity(density);
+        }
     }
 
 
 
     public static void main(String[] args) {
-        PApplet.main("eu.medek.opticssimulator.ManualCircleGlass");
+        PApplet.main("eu.medek.opticssimulator.logic.ManualRaysPackage");
     }
 }

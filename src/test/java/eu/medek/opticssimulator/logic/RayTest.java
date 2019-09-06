@@ -1,6 +1,6 @@
-package eu.medek.opticssimulator;
+package eu.medek.opticssimulator.logic;
 
-import eu.medek.opticssimulator.rays.Ray;
+import eu.medek.opticssimulator.logic.rays.Ray;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -27,7 +27,7 @@ public class RayTest {
                 isSimilarDouble(ray.getAngle(), 5) && isSimilarDouble(ray.getStrength(), 6));
 
         ray = new Ray();
-        expected = new Ray(0,0,0,0);
+        expected = new Ray(0,0,0,1);
         assertTrue(isSimilarRay(ray, expected));
 
         Vector position = new Vector(1, 2);
@@ -89,13 +89,13 @@ public class RayTest {
         Ray expected, ray;
 
         ray = new Ray();
-        expected = new Ray(0,0,0,0);
+        expected = new Ray(0,0,0,1);
         assertTrue(isSimilarRay(ray, expected));
 
         Vector position = ray.getPosition();
         position.x = 5;
         position.y = 10;
-        expected = new Ray(5,10,0,0);
+        expected = new Ray(5,10,0,1);
         assertTrue(isSimilarRay(ray, expected));
     }
 
