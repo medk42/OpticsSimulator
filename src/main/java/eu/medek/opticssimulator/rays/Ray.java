@@ -32,7 +32,7 @@ public class Ray {
     }
 
     public Ray() {
-        this(0,0,0,0);
+        this(0,0,0,1);
     }
 
 

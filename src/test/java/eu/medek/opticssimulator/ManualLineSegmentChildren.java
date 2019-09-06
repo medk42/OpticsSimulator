@@ -12,7 +12,7 @@ import processing.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ManualTests1 extends PApplet {
+public class ManualLineSegmentChildren extends PApplet {
 
     private Vector rayStart, rayEnd;
 
@@ -138,6 +138,6 @@ public class ManualTests1 extends PApplet {
 
 
     public static void main(String[] args) {
-        PApplet.main("eu.medek.opticssimulator.ManualTests1");
+        PApplet.main("eu.medek.opticssimulator.ManualLineSegmentChildren");
     }
 }

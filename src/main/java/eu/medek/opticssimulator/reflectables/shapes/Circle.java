@@ -3,13 +3,14 @@ package eu.medek.opticssimulator.reflectables.shapes;
 import eu.medek.opticssimulator.rays.Ray;
 import eu.medek.opticssimulator.Vector;
 import eu.medek.opticssimulator.reflectables.Reflactable;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 public abstract class Circle implements Reflactable {
 
     // Variables
     final protected Vector center;
     protected double radius;
+
+    private static final double MIN_LIMIT = .00001d;
 
 
     // Constructors
@@ -51,29 +52,68 @@ public abstract class Circle implements Reflactable {
      */
     @Override
     public Vector getIntersection(Ray ray) {
-//        Vector rayPosition = ray.getPosition();
-//        Vector headingVector = Vector.fromAngle(ray.getAngle()).add(rayPosition);
-//
-//        double x1 = rayPosition.x;
-//        double y1 = rayPosition.y;
-//        double x2 = headingVector.x;
-//        double y2 = headingVector.y;
-//
-//        double x3 = pointA.x;
-//        double y3 = pointA.y;
-//        double x4 = pointB.x;
-//        double y4 = pointB.y;
-//
-//        double denominator = (x1-x2)*(y3-y4)-(y1-y2)*(x3-x4);
-//
-//        if (denominator == 0) return null;
-//
-//        double t = ((x1-x3)*(y3-y4)-(y1-y3)*(x3-x4))/denominator;
-//        double u = ((y1-y2)*(x1-x3)-(x1-x2)*(y1-y3))/denominator;
-//
-//        if (t < 0 || u < 0 || u > 1) return null;
-//
-//        return new Vector(x1+t*(x2-x1), y1+t*(y2-y1));
-        throw new NotImplementedException();
+        Vector delta = Vector.fromAngle(ray.getAngle());
+        Vector rayRelativeStart = Vector.sub(ray.getPosition(), center);
+        Vector rayRelativeEnd = Vector.add(rayRelativeStart, delta);
+
+        double deltaRadius = delta.mag();
+        double D = rayRelativeStart.x*rayRelativeEnd.y - rayRelativeEnd.x*rayRelativeStart.y;
+
+        double discriminant = square(radius) * square(deltaRadius) - square(D);
+
+        // If there is an intersection, find the point
+        if (discriminant > 0) {
+            // Some fancy math to find the two points of intersection
+            double discriminantSqrt = Math.sqrt(discriminant);
+            double deltaRadiusSquared = square(deltaRadius);
+
+            double topX1 = D * delta.y;
+            double topX2 = sign(delta.y) * delta.x * discriminantSqrt;
+            double topY1 = -D * delta.x;
+            double topY2 = Math.abs(delta.y) * discriminantSqrt;
+
+            double x1 = (topX1 + topX2) / deltaRadiusSquared;
+            double x2 = (topX1 - topX2) / deltaRadiusSquared;
+            double y1 = (topY1 + topY2) / deltaRadiusSquared;
+            double y2 = (topY1 - topY2) / deltaRadiusSquared;
+
+            // Here are the resulting points of intersection
+            Vector p1 = new Vector(x1, y1);
+            Vector p2 = new Vector(x2, y2);
+
+            Vector p1Delta = Vector.sub(p1, rayRelativeStart);
+            Vector p2Delta = Vector.sub(p2, rayRelativeStart);
+
+            p1.add(center);
+            p2.add(center);
+
+            // Only keep the closer one which is in front of the ray
+            if (sign(p1Delta.x) != sign(delta.x) || sign(p1Delta.y) != sign(delta.y)) p1 = null;
+
+            if (sign(p2Delta.x) != sign(delta.x) || sign(p2Delta.y) != sign(delta.y)) p2 = null;
+
+            if (p1Delta.mag() <= MIN_LIMIT) p1 = null; // Might be problems with MIN_LIMIT if zoomed too close
+            if (p2Delta.mag() <= MIN_LIMIT) p2 = null;
+
+            if (p1 != null && p2 != null) {
+                if (p1Delta.mag() < p2Delta.mag()) p2 = null;
+                else p1 = null;
+            }
+
+            // Return result
+            if (p1 != null) return p1;
+            if (p2 != null) return p2;
+        }
+
+        // If there is no intersection, return null
+        return null;
+    }
+
+    private double square(double num) {
+        return num * num;
+    }
+
+    private int sign(double val) {
+        return (val >= 0)?1:-1;
     }
 }

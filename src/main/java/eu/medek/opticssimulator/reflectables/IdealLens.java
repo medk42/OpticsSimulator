@@ -9,13 +9,17 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class IdealLens extends LineSegment {
+
+    // Variables
     private static final double HALF_PI = Math.PI / 2;
     private static final double TWO_PI = Math.PI * 2;
 
     private double focusDistance;
 
+
+    // Constructors
     /**
-     * Creates a new Mirror using vectors passed as references
+     * Create a new IdealLens using vectors passed as references
      * @exception RuntimeException throws runtime exception if focusDistance is set to 0
      */
     public IdealLens(Vector pointA, Vector pointB, double focusDistance) {
@@ -25,7 +29,7 @@ public class IdealLens extends LineSegment {
     }
 
     /**
-     * Creates a new Mirror with the specified coordinates used as endpoints.
+     * Create a new IdealLens with the specified coordinates used as endpoints.
      * @exception RuntimeException throws runtime exception if focusDistance is set to 0
      */
     public IdealLens(double x1, double y1, double x2, double y2, double focusDistance) {
@@ -34,6 +38,8 @@ public class IdealLens extends LineSegment {
         this.focusDistance = focusDistance;
     }
 
+
+    // Getters/Setters
     public double getFocusDistance() {
         return focusDistance;
     }
@@ -47,6 +53,8 @@ public class IdealLens extends LineSegment {
         this.focusDistance = focusDistance;
     }
 
+
+    // Methods
     /**
      * Make the angle in range -PI to +PI
      */
@@ -92,21 +100,6 @@ public class IdealLens extends LineSegment {
                 beta = Math.atan(tanAlpha - tanGamma);
                 beta += lensAngle - HALF_PI;
             }
-
-//TODO: delete debugging code
-//            System.out.println("Point A: x: " + pointA.x + " y: " + pointA.y);
-//            System.out.println("Point B: x: " + pointB.x + " y: " + pointB.y);
-//            System.out.println("Lens center: x: " + lensCenter.x + " y: " + lensCenter.y);
-//            System.out.println("Lens angle: " + lensAngle);
-//            System.out.println("Ray angle: " + rayAngle);
-//            System.out.println("Direction vector: x: " + directionVector.x + " y: " + directionVector.y);
-//            System.out.println("Alpha: " + alpha);
-//            System.out.println("tanAlpha: " + tanAlpha);
-//            System.out.println("Intersection lens center distance: " + intersectionLensCenterDistance);
-//            System.out.println("Tan gamma: " + tanGamma);
-//            System.out.println("beta: " + beta);
-//            System.out.println();
-//            System.out.println();
 
             Ray resultingRay = new Ray(intersection, beta, ray.getStrength());
             resultingRay.getIgnoredReflactables().add(this);
