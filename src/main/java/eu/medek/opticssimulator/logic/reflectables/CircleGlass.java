@@ -73,6 +73,7 @@ public class CircleGlass extends Circle {
             double rayAngle =  normalizeAngle(ray.getAngle() + Math.PI);
             double incomingAngleDelta =  normalizeAngle(angleCenterToIntersection - rayAngle);
             double rayRefractiveIndex = 1;  // expecting the ray to come from empty space rather than other Circle or other non-ideal optical object
+            //TODO: get refractive index from ray
 
             double resultingAngle;
 

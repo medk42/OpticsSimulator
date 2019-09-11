@@ -27,7 +27,7 @@ public class ManualCircleGlass extends PApplet {
 
     public void setup() {
         size(640, 480);
-        //frameRate(2);
+
         rayStart = new Vector(0,0);
         rayEnd = new Vector(1, 1);
 

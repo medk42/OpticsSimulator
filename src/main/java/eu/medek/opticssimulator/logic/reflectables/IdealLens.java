@@ -92,10 +92,6 @@ public class IdealLens extends LineSegment {
                 beta = Math.atan(-tanAlpha - tanGamma);
                 beta = Math.PI - beta;
                 beta += lensAngle - HALF_PI;
-
-//TODO: to be removed if not used later
-//                beta = Math.atan(tanAlpha - (-tanGamma));
-//                beta += lensAngle + HALF_PI;
             } else {
                 beta = Math.atan(tanAlpha - tanGamma);
                 beta += lensAngle - HALF_PI;

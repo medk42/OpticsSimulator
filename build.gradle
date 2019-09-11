@@ -13,5 +13,5 @@ repositories {
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
     // https://mvnrepository.com/artifact/org.processing/core
-    compile group: 'org.processing', name: 'core', version: '2.2.1'
+    compile group: 'org.processing', name: 'core', version: '3.3.7'
 }
