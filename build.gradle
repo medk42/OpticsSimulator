@@ -15,3 +15,10 @@ dependencies {
     // https://mvnrepository.com/artifact/org.processing/core
     compile group: 'org.processing', name: 'core', version: '3.3.7'
 }
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'eu.medek.opticssimulator.gui.GUIEntry'
+        attributes 'Class-path': 'lib/core-3.3.7.jar'
+    }
+}

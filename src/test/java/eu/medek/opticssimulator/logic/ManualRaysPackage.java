@@ -31,9 +31,11 @@ public class ManualRaysPackage extends PApplet {
 
     private double ZOOM_AMOUNT = 0.9d;
 
-    public void setup() {
+    public void settings() {
         size(640, 480);
+    }
 
+    public void setup() {
         reflactables = new ArrayList<>();
         densityListeners = new LinkedList<>();
 

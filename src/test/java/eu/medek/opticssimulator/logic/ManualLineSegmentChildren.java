@@ -23,8 +23,11 @@ public class ManualLineSegmentChildren extends PApplet {
 
     private boolean keyReleased = true;
 
-    public void setup() {
+    public void settings() {
         size(640, 480);
+    }
+
+    public void setup() {
         rayStart = new Vector(0,0);
         rayEnd = new Vector(1, 1);
 

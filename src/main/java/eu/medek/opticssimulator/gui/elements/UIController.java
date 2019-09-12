@@ -51,6 +51,7 @@ public class UIController {
     }
 
     public void draw() {
+        pApplet.strokeWeight(1);
         elements.forEach(UIElement::draw);
     }
 

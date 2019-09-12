@@ -88,9 +88,11 @@ public abstract class Circle implements Reflactable {
             p2.add(center);
 
             // Only keep the closer one which is in front of the ray
-            if (sign(p1Delta.x) != sign(delta.x) || sign(p1Delta.y) != sign(delta.y)) p1 = null;
+            if (sign(p1Delta.x) != sign(delta.x) && Math.abs(delta.x) > MIN_LIMIT) p1 = null;
+            if (sign(p1Delta.y) != sign(delta.y) && Math.abs(delta.y) > MIN_LIMIT) p1 = null;
 
-            if (sign(p2Delta.x) != sign(delta.x) || sign(p2Delta.y) != sign(delta.y)) p2 = null;
+            if (sign(p2Delta.x) != sign(delta.x) && Math.abs(delta.x) > MIN_LIMIT) p2 = null;
+            if (sign(p2Delta.y) != sign(delta.y) && Math.abs(delta.y) > MIN_LIMIT) p2 = null;
 
             if (p1Delta.mag() <= MIN_LIMIT) p1 = null; // Might be problems with MIN_LIMIT if zoomed too close
             if (p2Delta.mag() <= MIN_LIMIT) p2 = null;

@@ -27,6 +27,8 @@ public class GUIEntry extends PApplet {
 
     @Override
     public void setup() {
+        surface.setTitle("Optics Simulator");
+
         setupColorScheme();
 
         setupVisualization();

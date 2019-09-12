@@ -78,7 +78,6 @@ class RaySolver {
     }
 
     private void drawRay(float x1, float y1, float x2, float y2, float opacity) {
-        pApplet.strokeWeight(2);
         pApplet.stroke(255,170,0, opacity);
         pApplet.line(x1, y1, x2, y2);
     }
