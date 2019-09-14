@@ -118,6 +118,9 @@ public abstract class UIElement {
      */
     public abstract boolean mousePressed();
 
+    /**
+     * @return true if some UI has been triggered
+     */
     public abstract boolean mouseReleased();
 
     public abstract void draw();
