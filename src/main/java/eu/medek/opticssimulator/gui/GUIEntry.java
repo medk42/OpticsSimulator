@@ -8,8 +8,6 @@ import processing.event.MouseEvent;
 
 import static eu.medek.opticssimulator.gui.Constants.*;
 
-import static eu.medek.opticssimulator.gui.Constants.FILE_DROPDOWN_LABEL;
-
 public class GUIEntry extends PApplet {
 
     private UIController uiController;

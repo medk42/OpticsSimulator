@@ -8,8 +8,6 @@ public abstract class UIElement {
     // Variables
     private PVector position, dimensions;
     private String label, text;
-    private int textColor, backgroundColor, strokeColor;
-    private int hoverTextColor, hoverBackgroundColor, hoverStrokeColor;
     private int textSize;
     private ColorScheme colorScheme;
     PApplet pApplet;
@@ -25,13 +23,7 @@ public abstract class UIElement {
         this.label = label;
         this.text = text;
 
-        this.textColor = textColor;
-        this.backgroundColor = backgroundColor;
-        this.strokeColor = strokeColor;
-
-        this.hoverTextColor = hoverTextColor;
-        this.hoverBackgroundColor = hoverBackgroundColor;
-        this.hoverStrokeColor = hoverStrokeColor;
+        this.colorScheme = new ColorScheme(textColor, backgroundColor, strokeColor, hoverTextColor, hoverBackgroundColor, hoverStrokeColor);
 
         this.textSize = textSize;
         this.pApplet = pApplet;
@@ -71,33 +63,27 @@ public abstract class UIElement {
     }
 
     public int getTextColor() {
-        if (colorScheme != null) return colorScheme.getTextColor();
-        return textColor;
+        return colorScheme.getTextColor();
     }
 
     public int getBackgroundColor() {
-        if (colorScheme != null) return colorScheme.getBackgroundColor();
-        return backgroundColor;
+        return colorScheme.getBackgroundColor();
     }
 
     public int getStrokeColor() {
-        if (colorScheme != null) return colorScheme.getStrokeColor();
-        return strokeColor;
+        return colorScheme.getStrokeColor();
     }
 
     public int getHoverTextColor() {
-        if (colorScheme != null) return colorScheme.getHoverTextColor();
-        return hoverTextColor;
+        return colorScheme.getHoverTextColor();
     }
 
     public int getHoverBackgroundColor() {
-        if (colorScheme != null) return colorScheme.getHoverBackgroundColor();
-        return hoverBackgroundColor;
+        return colorScheme.getHoverBackgroundColor();
     }
 
     public int getHoverStrokeColor() {
-        if (colorScheme != null) return colorScheme.getHoverStrokeColor();
-        return hoverStrokeColor;
+        return colorScheme.getHoverStrokeColor();
     }
 
     public int getTextSize() {

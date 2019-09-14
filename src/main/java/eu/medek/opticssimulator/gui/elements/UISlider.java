@@ -15,7 +15,7 @@ public class UISlider extends UIElement {
     private boolean holding = false;
     private int sliderDeltaX;
 
-    private double PRECISION_ERROR = 0.00001;
+    private static final double PRECISION_ERROR = 0.00001;
 
 
     // Constructors

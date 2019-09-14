@@ -29,7 +29,7 @@ public class ManualRaysPackage extends PApplet {
 
     private boolean keyReleased = true, mouseLeftReleased = true, mouseRightReleased = true;
 
-    private double ZOOM_AMOUNT = 0.9d;
+    private static final double ZOOM_AMOUNT = 0.9d;
 
     public void settings() {
         size(640, 480);
