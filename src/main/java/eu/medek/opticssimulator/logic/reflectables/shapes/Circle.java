@@ -9,9 +9,9 @@ package eu.medek.opticssimulator.logic.reflectables.shapes;
 
 import eu.medek.opticssimulator.logic.rays.Ray;
 import eu.medek.opticssimulator.logic.Vector;
-import eu.medek.opticssimulator.logic.reflectables.Reflactable;
+import eu.medek.opticssimulator.logic.reflectables.Reflectable;
 
-public abstract class Circle implements Reflactable {
+public abstract class Circle implements Reflectable {
 
     // Variables
     final protected Vector center;

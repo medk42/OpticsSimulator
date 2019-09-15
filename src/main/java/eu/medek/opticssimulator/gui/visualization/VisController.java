@@ -9,14 +9,14 @@ package eu.medek.opticssimulator.gui.visualization;
 
 import eu.medek.opticssimulator.gui.elements.*;
 import eu.medek.opticssimulator.gui.visualization.interfaces.VisCastable;
-import eu.medek.opticssimulator.gui.visualization.interfaces.VisReflactable;
+import eu.medek.opticssimulator.gui.visualization.interfaces.VisReflectable;
 import eu.medek.opticssimulator.gui.visualization.prefabs.Vis1PointObject;
 import eu.medek.opticssimulator.gui.visualization.prefabs.Vis2PointObject;
 import eu.medek.opticssimulator.gui.visualization.rays.VisBeam;
 import eu.medek.opticssimulator.gui.visualization.rays.VisPointSource;
 import eu.medek.opticssimulator.gui.visualization.rays.VisRay;
-import eu.medek.opticssimulator.gui.visualization.reflactables.*;
-import eu.medek.opticssimulator.logic.reflectables.Reflactable;
+import eu.medek.opticssimulator.gui.visualization.reflectables.*;
+import eu.medek.opticssimulator.logic.reflectables.Reflectable;
 import processing.core.PApplet;
 import processing.core.PVector;
 import processing.event.MouseEvent;
@@ -28,9 +28,9 @@ import static eu.medek.opticssimulator.gui.Constants.*;
 public class VisController implements OnClickListener, OnChangeListener {
 
     // Variables
-    private LinkedList<VisReflactable> reflactables;
+    private LinkedList<VisReflectable> reflectables;
     private LinkedList<VisCastable> rays;
-    private LinkedList<Reflactable> reflactablesLogic;
+    private LinkedList<Reflectable> reflectablesLogic;
 
     private PApplet pApplet;
     private String actActionLabel;
@@ -84,9 +84,9 @@ public class VisController implements OnClickListener, OnChangeListener {
 
     // Methods
     private void reset() {
-        reflactables = new LinkedList<>();
+        reflectables = new LinkedList<>();
         rays = new LinkedList<>();
-        reflactablesLogic = new LinkedList<>();
+        reflectablesLogic = new LinkedList<>();
 
         settingsSlider = null;
 
@@ -115,7 +115,7 @@ public class VisController implements OnClickListener, OnChangeListener {
             case FLAT_MIRROR_BUTTON_LABEL:
             case BLOCKER_BUTTON_LABEL:
             case CIRCLE_LENS_BUTTON_LABEL:
-                if (!released) ((Vis2PointObject) reflactables.getLast()).getEnd().set(mouseWorld);
+                if (!released) ((Vis2PointObject) reflectables.getLast()).getEnd().set(mouseWorld);
                 break;
 
             case MOVE_BUTTON_LABEL:
@@ -135,8 +135,8 @@ public class VisController implements OnClickListener, OnChangeListener {
             pApplet.strokeWeight(1/this.viewZoom);
             pApplet.translate(this.viewCenter.x, this.viewCenter.y);
 
-            this.reflactables.forEach(reflactable -> reflactable.update(mouseWorld));
-            this.rays.forEach(ray -> ray.update(reflactablesLogic, mouseWorld));
+            this.reflectables.forEach(reflectable -> reflectable.update(mouseWorld));
+            this.rays.forEach(ray -> ray.update(reflectablesLogic, mouseWorld));
         pApplet.popMatrix();
 
         drawInfo();
@@ -154,18 +154,18 @@ public class VisController implements OnClickListener, OnChangeListener {
         if (settingsSlider != null) {
             double value = 0;
 
-            VisReflactable reflactable = reflactables.get(Integer.parseInt(settingsSlider.getLabel()));
-            if (reflactable instanceof VisCircleGlass) {
+            VisReflectable reflectable = reflectables.get(Integer.parseInt(settingsSlider.getLabel()));
+            if (reflectable instanceof VisCircleGlass) {
                 value = settingsSlider.getValue() * (REFRACTIVE_INDEX_MAX - REFRACTIVE_INDEX_MIN) + REFRACTIVE_INDEX_MIN;
-                ((VisCircleGlass) reflactable).setRefractiveIndex(value);
+                ((VisCircleGlass) reflectable).setRefractiveIndex(value);
             }
-            else if (reflactable instanceof VisIdealLens) {
+            else if (reflectable instanceof VisIdealLens) {
                 value = settingsSlider.getValue() * (FOCUS_DISTANCE_MAX - FOCUS_DISTANCE_MIN) + FOCUS_DISTANCE_MIN;
-                ((VisIdealLens) reflactable).setFocusDistance(value);
+                ((VisIdealLens) reflectable).setFocusDistance(value);
             }
-            else if (reflactable instanceof VisIdealCurvedMirror) {
+            else if (reflectable instanceof VisIdealCurvedMirror) {
                 value = settingsSlider.getValue() * (FOCUS_DISTANCE_MAX - FOCUS_DISTANCE_MIN) + FOCUS_DISTANCE_MIN;
-                ((VisIdealCurvedMirror) reflactable).setFocusDistance(value);
+                ((VisIdealCurvedMirror) reflectable).setFocusDistance(value);
             }
 
             settingsSlider.draw();
@@ -196,13 +196,13 @@ public class VisController implements OnClickListener, OnChangeListener {
                 }
             }
 
-            for (VisReflactable reflactable : reflactables) {
-                if (reflactable instanceof Vis2PointObject) {
-                    Vis2PointObject vis2PointObject = (Vis2PointObject) reflactable;
+            for (VisReflectable reflectable : reflectables) {
+                if (reflectable instanceof Vis2PointObject) {
+                    Vis2PointObject vis2PointObject = (Vis2PointObject) reflectable;
                     if (vis2PointObject.closeEnough(vis2PointObject.getStart(), mouseWorld) ||
                             vis2PointObject.closeEnough(vis2PointObject.getEnd(), mouseWorld)) {
-                        reflactables.remove(reflactable);
-                        reflactablesLogic.remove(reflactable.getReflactable());
+                        reflectables.remove(reflectable);
+                        reflectablesLogic.remove(reflectable.getReflectable());
                         return;
                     }
                 }
@@ -212,19 +212,19 @@ public class VisController implements OnClickListener, OnChangeListener {
         }
 
         for (VisCastable ray : rays) if (ray.mousePressed(mouseWorld)) return;
-        for (VisReflactable reflactable: reflactables) {
-            if (reflactable.mousePressed(mouseWorld)) {
-                if (reflactable instanceof VisCircleGlass) {
-                    settingsSlider = new UISlider((int) infoLocation.x, (int) (infoLocation.y + lineHeight), SETTINGS_SLIDER_WIDTH, lineHeight, Integer.toString(reflactables.indexOf(reflactable)), REFRACTIVE_INDEX_TEXT, textSize, pApplet, colorScheme);
-                    double refractiveIndexPercentage = (((VisCircleGlass) reflactable).getRefractiveIndex() - REFRACTIVE_INDEX_MIN) / (REFRACTIVE_INDEX_MAX - REFRACTIVE_INDEX_MIN);
+        for (VisReflectable reflectable: reflectables) {
+            if (reflectable.mousePressed(mouseWorld)) {
+                if (reflectable instanceof VisCircleGlass) {
+                    settingsSlider = new UISlider((int) infoLocation.x, (int) (infoLocation.y + lineHeight), SETTINGS_SLIDER_WIDTH, lineHeight, Integer.toString(reflectables.indexOf(reflectable)), REFRACTIVE_INDEX_TEXT, textSize, pApplet, colorScheme);
+                    double refractiveIndexPercentage = (((VisCircleGlass) reflectable).getRefractiveIndex() - REFRACTIVE_INDEX_MIN) / (REFRACTIVE_INDEX_MAX - REFRACTIVE_INDEX_MIN);
                     settingsSlider.setValue(refractiveIndexPercentage);
-                } else if (reflactable instanceof VisIdealLens) {
-                    settingsSlider = new UISlider((int) infoLocation.x, (int) (infoLocation.y + lineHeight), SETTINGS_SLIDER_WIDTH, lineHeight, Integer.toString(reflactables.indexOf(reflactable)), FOCUS_DISTANCE_TEXT, textSize, pApplet, colorScheme);
-                    double focusDistancePercentage = (((VisIdealLens) reflactable).getFocusDistance() - FOCUS_DISTANCE_MIN) / (FOCUS_DISTANCE_MAX - FOCUS_DISTANCE_MIN);
+                } else if (reflectable instanceof VisIdealLens) {
+                    settingsSlider = new UISlider((int) infoLocation.x, (int) (infoLocation.y + lineHeight), SETTINGS_SLIDER_WIDTH, lineHeight, Integer.toString(reflectables.indexOf(reflectable)), FOCUS_DISTANCE_TEXT, textSize, pApplet, colorScheme);
+                    double focusDistancePercentage = (((VisIdealLens) reflectable).getFocusDistance() - FOCUS_DISTANCE_MIN) / (FOCUS_DISTANCE_MAX - FOCUS_DISTANCE_MIN);
                     settingsSlider.setValue(focusDistancePercentage);
-                } else if (reflactable instanceof VisIdealCurvedMirror) {
-                    settingsSlider = new UISlider((int) infoLocation.x, (int) (infoLocation.y + lineHeight), SETTINGS_SLIDER_WIDTH, lineHeight, Integer.toString(reflactables.indexOf(reflactable)), FOCUS_DISTANCE_TEXT, textSize, pApplet, colorScheme);
-                    double focusDistancePercentage = (((VisIdealCurvedMirror) reflactable).getFocusDistance() - FOCUS_DISTANCE_MIN) / (FOCUS_DISTANCE_MAX - FOCUS_DISTANCE_MIN);
+                } else if (reflectable instanceof VisIdealCurvedMirror) {
+                    settingsSlider = new UISlider((int) infoLocation.x, (int) (infoLocation.y + lineHeight), SETTINGS_SLIDER_WIDTH, lineHeight, Integer.toString(reflectables.indexOf(reflectable)), FOCUS_DISTANCE_TEXT, textSize, pApplet, colorScheme);
+                    double focusDistancePercentage = (((VisIdealCurvedMirror) reflectable).getFocusDistance() - FOCUS_DISTANCE_MIN) / (FOCUS_DISTANCE_MAX - FOCUS_DISTANCE_MIN);
                     settingsSlider.setValue(focusDistancePercentage);
                 }
                 return;
@@ -243,37 +243,37 @@ public class VisController implements OnClickListener, OnChangeListener {
                 break;
             case CIRCLE_LENS_BUTTON_LABEL:
                 VisCircleGlass newCircleGlass = new VisCircleGlass(mouseWorld.copy(), mouseWorld.copy(), pApplet, REFRACTIVE_INDEX_DEFAULT);
-                this.reflactables.add(newCircleGlass);
-                this.reflactablesLogic.add(newCircleGlass.getReflactable());
+                this.reflectables.add(newCircleGlass);
+                this.reflectablesLogic.add(newCircleGlass.getReflectable());
 
-                settingsSlider = new UISlider((int) infoLocation.x, (int) (infoLocation.y + lineHeight), SETTINGS_SLIDER_WIDTH, lineHeight, Integer.toString(reflactables.indexOf(newCircleGlass)), REFRACTIVE_INDEX_TEXT, textSize, pApplet, colorScheme);
+                settingsSlider = new UISlider((int) infoLocation.x, (int) (infoLocation.y + lineHeight), SETTINGS_SLIDER_WIDTH, lineHeight, Integer.toString(reflectables.indexOf(newCircleGlass)), REFRACTIVE_INDEX_TEXT, textSize, pApplet, colorScheme);
                 settingsSlider.setValue((newCircleGlass.getRefractiveIndex() - REFRACTIVE_INDEX_MIN) / (REFRACTIVE_INDEX_MAX - REFRACTIVE_INDEX_MIN));
                 break;
             case IDEAL_LENS_BUTTON_LABEL:
                 VisIdealLens newIdealLens = new VisIdealLens(mouseWorld.copy(), mouseWorld.copy(), pApplet, FOCUS_DISTANCE_DEFAULT);
-                this.reflactables.add(newIdealLens);
-                this.reflactablesLogic.add(newIdealLens.getReflactable());
+                this.reflectables.add(newIdealLens);
+                this.reflectablesLogic.add(newIdealLens.getReflectable());
 
-                settingsSlider = new UISlider((int) infoLocation.x, (int) (infoLocation.y + lineHeight), SETTINGS_SLIDER_WIDTH, lineHeight, Integer.toString(reflactables.indexOf(newIdealLens)), FOCUS_DISTANCE_TEXT, textSize, pApplet, colorScheme);
+                settingsSlider = new UISlider((int) infoLocation.x, (int) (infoLocation.y + lineHeight), SETTINGS_SLIDER_WIDTH, lineHeight, Integer.toString(reflectables.indexOf(newIdealLens)), FOCUS_DISTANCE_TEXT, textSize, pApplet, colorScheme);
                 settingsSlider.setValue((newIdealLens.getFocusDistance() - FOCUS_DISTANCE_MIN) / (FOCUS_DISTANCE_MAX - FOCUS_DISTANCE_MIN));
                 break;
             case IDEAL_CURVED_MIRROR_BUTTON_LABEL:
                 VisIdealCurvedMirror newIdealCurvedMirror = new VisIdealCurvedMirror(mouseWorld.copy(), mouseWorld.copy(), pApplet, FOCUS_DISTANCE_DEFAULT);
-                this.reflactables.add(newIdealCurvedMirror);
-                this.reflactablesLogic.add(newIdealCurvedMirror.getReflactable());
+                this.reflectables.add(newIdealCurvedMirror);
+                this.reflectablesLogic.add(newIdealCurvedMirror.getReflectable());
 
-                settingsSlider = new UISlider((int) infoLocation.x, (int) (infoLocation.y + lineHeight), SETTINGS_SLIDER_WIDTH, lineHeight, Integer.toString(reflactables.indexOf(newIdealCurvedMirror)), FOCUS_DISTANCE_TEXT, textSize, pApplet, colorScheme);
+                settingsSlider = new UISlider((int) infoLocation.x, (int) (infoLocation.y + lineHeight), SETTINGS_SLIDER_WIDTH, lineHeight, Integer.toString(reflectables.indexOf(newIdealCurvedMirror)), FOCUS_DISTANCE_TEXT, textSize, pApplet, colorScheme);
                 settingsSlider.setValue((newIdealCurvedMirror.getFocusDistance() - FOCUS_DISTANCE_MIN) / (FOCUS_DISTANCE_MAX - FOCUS_DISTANCE_MIN));
                 break;
             case FLAT_MIRROR_BUTTON_LABEL:
                 VisMirror newMirror = new VisMirror(mouseWorld.copy(), mouseWorld.copy(), pApplet);
-                this.reflactables.add(newMirror);
-                this.reflactablesLogic.add(newMirror.getReflactable());
+                this.reflectables.add(newMirror);
+                this.reflectablesLogic.add(newMirror.getReflectable());
                 break;
             case BLOCKER_BUTTON_LABEL:
                 VisBlockerLine newBlocker = new VisBlockerLine(mouseWorld.copy(), mouseWorld.copy(), pApplet);
-                this.reflactables.add(newBlocker);
-                this.reflactablesLogic.add(newBlocker.getReflactable());
+                this.reflectables.add(newBlocker);
+                this.reflectablesLogic.add(newBlocker.getReflectable());
                 break;
             case MOVE_BUTTON_LABEL:
                 lastMousePosition = new PVector(pApplet.mouseX, pApplet.mouseY);
@@ -286,7 +286,7 @@ public class VisController implements OnClickListener, OnChangeListener {
         if (settingsSlider != null && settingsSlider.mouseReleased()) return;
 
         for (VisCastable ray : rays) if (ray.mouseReleased()) return;
-        for (VisReflactable reflactable: reflactables) if (reflactable.mouseReleased()) return;
+        for (VisReflectable reflectable: reflectables) if (reflectable.mouseReleased()) return;
 
         released = true;
     }

@@ -7,7 +7,7 @@
 
 package eu.medek.opticssimulator.logic.rays;
 
-import eu.medek.opticssimulator.logic.reflectables.Reflactable;
+import eu.medek.opticssimulator.logic.reflectables.Reflectable;
 import eu.medek.opticssimulator.logic.Response;
 import eu.medek.opticssimulator.logic.Vector;
 
@@ -23,7 +23,7 @@ public class Ray {
      */
     private double angle;
     private double strength;
-    final private List<Reflactable> ignoredReflactables;
+    final private List<Reflectable> ignoredReflectables;
 
 
     // Constructors
@@ -31,7 +31,7 @@ public class Ray {
         this.position = position;
         this.angle = angle;
         this.strength = strength;
-        ignoredReflactables = new LinkedList<>();
+        ignoredReflectables = new LinkedList<>();
     }
 
     public Ray(double x, double y, double angle, double strength) {
@@ -73,8 +73,8 @@ public class Ray {
         return strength;
     }
 
-    public List<Reflactable> getIgnoredReflactables() {
-        return ignoredReflactables;
+    public List<Reflectable> getIgnoredReflectables() {
+        return ignoredReflectables;
     }
 
 
@@ -85,16 +85,16 @@ public class Ray {
     }
 
     /**
-     * Checks all Reflactable objects and returns Response object containing the closest point of impact
-     * @param reflactables Reflactable objects to check
+     * Checks all Reflectable objects and returns Response object containing the closest point of impact
+     * @param reflectables Reflectable objects to check
      * @return Response object containing the closest point of impact
      */
-    public Response solveReflactables(List<Reflactable> reflactables) {
+    public Response solveReflectables(List<Reflectable> reflectables) {
         Response closest = null;
-        reflactables = new LinkedList<>(reflactables);
-        reflactables.removeAll(ignoredReflactables);
-        for (Reflactable reflactable : reflactables) {
-            Response response = reflactable.getImpactResult(this);
+        reflectables = new LinkedList<>(reflectables);
+        reflectables.removeAll(ignoredReflectables);
+        for (Reflectable reflectable : reflectables) {
+            Response response = reflectable.getImpactResult(this);
             if (response.getImpact()) {
                 if (closest == null || Vector.dist(response.getPointOfImpact(), this.position) < Vector.dist(closest.getPointOfImpact(), this.position)) {
                     closest = response;

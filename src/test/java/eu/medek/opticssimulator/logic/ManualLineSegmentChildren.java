@@ -11,7 +11,7 @@ import eu.medek.opticssimulator.logic.rays.Ray;
 import eu.medek.opticssimulator.logic.reflectables.IdealCurvedMirror;
 import eu.medek.opticssimulator.logic.reflectables.IdealLens;
 import eu.medek.opticssimulator.logic.reflectables.Mirror;
-import eu.medek.opticssimulator.logic.reflectables.Reflactable;
+import eu.medek.opticssimulator.logic.reflectables.Reflectable;
 import processing.core.PApplet;
 import processing.event.KeyEvent;
 import processing.event.MouseEvent;
@@ -26,7 +26,7 @@ public class ManualLineSegmentChildren extends PApplet {
     private Vector objStart, objEnd;
 
     private Ray ray;
-    private List<Reflactable> reflactables;
+    private List<Reflectable> reflectables;
 
     private boolean keyReleased = true;
 
@@ -42,31 +42,31 @@ public class ManualLineSegmentChildren extends PApplet {
         objEnd = new Vector(100,100);
 
         ray = new Ray(rayStart, -Math.PI/4d, 1d);
-        reflactables = new ArrayList<>();
+        reflectables = new ArrayList<>();
 
         //CHANGE FOR TESTING DIFFERENT COMPONENTS
-        reflactables.add(new IdealCurvedMirror(objStart, objEnd, 50));
+        reflectables.add(new IdealCurvedMirror(objStart, objEnd, 50));
         //END CHANGE
 
-        reflactables.add(new Mirror(0,0,width,0));
-        reflactables.add(new Mirror(0,0,0,height));
-        reflactables.add(new Mirror(width,height,width,0));
-        reflactables.add(new Mirror(width,height,0,height));
+        reflectables.add(new Mirror(0,0,width,0));
+        reflectables.add(new Mirror(0,0,0,height));
+        reflectables.add(new Mirror(width,height,width,0));
+        reflectables.add(new Mirror(width,height,0,height));
     }
 
     public void draw() {
         background(0);
         fill(255);
 
-        for (Reflactable reflactable : reflactables) {
-            if (reflactable instanceof IdealLens) {
-                Vector pointA = ((IdealLens) reflactable).getPointA();
-                Vector pointB = ((IdealLens) reflactable).getPointB();
+        for (Reflectable reflectable : reflectables) {
+            if (reflectable instanceof IdealLens) {
+                Vector pointA = ((IdealLens) reflectable).getPointA();
+                Vector pointB = ((IdealLens) reflectable).getPointB();
                 fill(255);
                 ellipse((float) pointA.x, (float) pointA.y, 30, 30);
                 ellipse((float) pointB.x, (float) pointB.y, 30, 30);
                 Vector center = Vector.add(pointA, Vector.sub(pointB, pointA).div(2));
-                Vector dir = Vector.sub(pointB, pointA).normalize().rotate(-Math.PI / 2).mult(((IdealLens) reflactable).getFocusDistance());
+                Vector dir = Vector.sub(pointB, pointA).normalize().rotate(-Math.PI / 2).mult(((IdealLens) reflectable).getFocusDistance());
                 Vector focus = Vector.add(center, dir);
                 Vector focus2 = Vector.sub(center, dir);
                 ellipse((float) focus.x, (float) focus.y, 8, 8);
@@ -101,7 +101,7 @@ public class ManualLineSegmentChildren extends PApplet {
 
     private void solveRay(Ray ray, int limit) {
         if (limit == 0) return;
-        Response response = ray.solveReflactables(reflactables);
+        Response response = ray.solveReflectables(reflectables);
         if (response.getImpact()) {
             strokeWeight(2);
             stroke(200,100,100,(float) ray.getStrength()*255);
@@ -136,9 +136,9 @@ public class ManualLineSegmentChildren extends PApplet {
     }
 
     public void mouseWheel(MouseEvent event) {
-        for (Reflactable reflactable : reflactables) {
-            if (reflactable instanceof IdealLens) {
-                IdealLens converted = (IdealLens) reflactable;
+        for (Reflectable reflectable : reflectables) {
+            if (reflectable instanceof IdealLens) {
+                IdealLens converted = (IdealLens) reflectable;
                 if (converted.getFocusDistance()+event.getCount() != 0) converted.setFocusDistance(converted.getFocusDistance()+event.getCount());
                 else converted.setFocusDistance(converted.getFocusDistance()+event.getCount()*2);
             }

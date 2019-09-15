@@ -8,7 +8,7 @@
 package eu.medek.opticssimulator.logic;
 
 import eu.medek.opticssimulator.logic.rays.Ray;
-import eu.medek.opticssimulator.logic.reflectables.Reflactable;
+import eu.medek.opticssimulator.logic.reflectables.Reflectable;
 
 import java.util.List;
 
@@ -17,7 +17,7 @@ public class Response {
     // Variables
     final private boolean impact;
     final private Vector pointOfImpact;
-    final private Reflactable objectHit;
+    final private Reflectable objectHit;
     final private List<Ray> resultingRays;
 
 
@@ -39,7 +39,7 @@ public class Response {
      * @param objectHit object that has been hit by the ray
      * @param resultingRays rays that have been created by the impact
      */
-    public Response(Vector pointOfImpact, Reflactable objectHit, List<Ray> resultingRays) {
+    public Response(Vector pointOfImpact, Reflectable objectHit, List<Ray> resultingRays) {
         this.impact = true;
         this.pointOfImpact = pointOfImpact;
         this.objectHit = objectHit;
@@ -68,7 +68,7 @@ public class Response {
     /**
      * Gets reference to the object that has been hit.
      */
-    public Reflactable getHitObject() {
+    public Reflectable getHitObject() {
         return objectHit;
     }
 

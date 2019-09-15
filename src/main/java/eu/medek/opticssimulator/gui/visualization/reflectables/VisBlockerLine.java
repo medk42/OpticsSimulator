@@ -5,17 +5,17 @@
  * Programování II (NPRG031)
  */
 
-package eu.medek.opticssimulator.gui.visualization.reflactables;
+package eu.medek.opticssimulator.gui.visualization.reflectables;
 
-import eu.medek.opticssimulator.gui.visualization.interfaces.VisReflactable;
+import eu.medek.opticssimulator.gui.visualization.interfaces.VisReflectable;
 import eu.medek.opticssimulator.gui.visualization.prefabs.Vis2PointObject;
 import eu.medek.opticssimulator.logic.Vector;
 import eu.medek.opticssimulator.logic.reflectables.BlockerLine;
-import eu.medek.opticssimulator.logic.reflectables.Reflactable;
+import eu.medek.opticssimulator.logic.reflectables.Reflectable;
 import processing.core.PApplet;
 import processing.core.PVector;
 
-public class VisBlockerLine extends Vis2PointObject implements VisReflactable {
+public class VisBlockerLine extends Vis2PointObject implements VisReflectable {
 
     // Variables
     private BlockerLine blockerLine;
@@ -49,7 +49,7 @@ public class VisBlockerLine extends Vis2PointObject implements VisReflactable {
     }
 
     @Override
-    public Reflactable getReflactable() {
+    public Reflectable getReflectable() {
         return blockerLine;
     }
 }

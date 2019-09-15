@@ -26,7 +26,7 @@ public class ManualCircleGlass extends PApplet {
     private Vector objStart, objEnd;
 
     private Ray ray;
-    private List<Reflactable> reflactables;
+    private List<Reflectable> reflectables;
 
     private static final double CHANGE_AMOUNT = 0.9d;
 
@@ -44,14 +44,14 @@ public class ManualCircleGlass extends PApplet {
         objEnd = new Vector(100,100);
 
         ray = new Ray(rayStart, -Math.PI/4d, 1d);
-        reflactables = new ArrayList<>();
+        reflectables = new ArrayList<>();
 
-        reflactables.add(new CircleGlass(objStart, Vector.dist(objStart, objEnd), 1.2d));
+        reflectables.add(new CircleGlass(objStart, Vector.dist(objStart, objEnd), 1.2d));
 
-        reflactables.add(new Mirror(0,0,width,0));
-        reflactables.add(new Mirror(0,0,0,height));
-        reflactables.add(new Mirror(width,height,width,0));
-        reflactables.add(new Mirror(width,height,0,height));
+        reflectables.add(new Mirror(0,0,width,0));
+        reflectables.add(new Mirror(0,0,0,height));
+        reflectables.add(new Mirror(width,height,width,0));
+        reflectables.add(new Mirror(width,height,0,height));
     }
 
     public void draw() {
@@ -60,15 +60,15 @@ public class ManualCircleGlass extends PApplet {
         background(0);
         fill(255);
 
-        for (Reflactable reflactable : reflactables) {
-            if (reflactable instanceof IdealLens) {
-                Vector pointA = ((IdealLens) reflactable).getPointA();
-                Vector pointB = ((IdealLens) reflactable).getPointB();
+        for (Reflectable reflectable : reflectables) {
+            if (reflectable instanceof IdealLens) {
+                Vector pointA = ((IdealLens) reflectable).getPointA();
+                Vector pointB = ((IdealLens) reflectable).getPointB();
                 fill(255);
                 ellipse((float) pointA.x, (float) pointA.y, 30, 30);
                 ellipse((float) pointB.x, (float) pointB.y, 30, 30);
                 Vector center = Vector.add(pointA, Vector.sub(pointB, pointA).div(2));
-                Vector dir = Vector.sub(pointB, pointA).normalize().rotate(-Math.PI / 2).mult(((IdealLens) reflactable).getFocusDistance());
+                Vector dir = Vector.sub(pointB, pointA).normalize().rotate(-Math.PI / 2).mult(((IdealLens) reflectable).getFocusDistance());
                 Vector focus = Vector.add(center, dir);
                 Vector focus2 = Vector.sub(center, dir);
                 ellipse((float) focus.x, (float) focus.y, 8, 8);
@@ -92,13 +92,13 @@ public class ManualCircleGlass extends PApplet {
 
         strokeWeight(1);
         stroke(255);
-        fill(80,40,230, (float) ((1d-1d/((CircleGlass) reflactables.get(0)).getRefractiveIndex()) * 255d));
+        fill(80,40,230, (float) ((1d-1d/((CircleGlass) reflectables.get(0)).getRefractiveIndex()) * 255d));
         if (!keyReleased) {
             objEnd.x = mouseX;
             objEnd.y = mouseY;
-            ((CircleGlass) reflactables.get(0)).setRadius(Vector.dist(objStart, objEnd));
+            ((CircleGlass) reflectables.get(0)).setRadius(Vector.dist(objStart, objEnd));
         }
-        double radius = ((CircleGlass) reflactables.get(0)).getRadius();
+        double radius = ((CircleGlass) reflectables.get(0)).getRadius();
         ellipse((float) objStart.x, (float) objStart.y, (float) radius*2, (float) radius*2);
 
         solveRay(ray, 5);
@@ -106,7 +106,7 @@ public class ManualCircleGlass extends PApplet {
 
     private void solveRay(Ray ray, int limit) {
         if (limit == 0) return;
-        Response response = ray.solveReflactables(reflactables);
+        Response response = ray.solveReflectables(reflectables);
         if (response.getImpact()) {
             strokeWeight(1);
             stroke(255, 50);
@@ -139,19 +139,19 @@ public class ManualCircleGlass extends PApplet {
         if (event.getKey() == ' ') {
             objEnd.x = mouseX;
             objEnd.y = mouseY;
-            ((CircleGlass) reflactables.get(0)).setRadius(Vector.dist(objStart, objEnd));
+            ((CircleGlass) reflectables.get(0)).setRadius(Vector.dist(objStart, objEnd));
             keyReleased = true;
         }
     }
 
     public void mouseWheel(MouseEvent event) {
-        for (Reflactable reflactable : reflactables) {
-            if (reflactable instanceof IdealLens) {
-                IdealLens converted = (IdealLens) reflactable;
+        for (Reflectable reflectable : reflectables) {
+            if (reflectable instanceof IdealLens) {
+                IdealLens converted = (IdealLens) reflectable;
                 if (converted.getFocusDistance()+event.getCount() != 0) converted.setFocusDistance(converted.getFocusDistance()+event.getCount());
                 else converted.setFocusDistance(converted.getFocusDistance()+event.getCount()*2);
-            } else if (reflactable instanceof  CircleGlass) {
-                CircleGlass converted = (CircleGlass) reflactable;
+            } else if (reflectable instanceof  CircleGlass) {
+                CircleGlass converted = (CircleGlass) reflectable;
                 double resultingValue = (converted.getRefractiveIndex() - 1) * Math.pow(CHANGE_AMOUNT, event.getCount()) + 1;
                 converted.setRefractiveIndex(resultingValue);
                 System.out.println(resultingValue);

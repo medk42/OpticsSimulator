@@ -11,7 +11,7 @@ import eu.medek.opticssimulator.gui.visualization.prefabs.Vis2PointObject;
 import eu.medek.opticssimulator.gui.visualization.interfaces.VisCastable;
 import eu.medek.opticssimulator.logic.Vector;
 import eu.medek.opticssimulator.logic.rays.Ray;
-import eu.medek.opticssimulator.logic.reflectables.Reflactable;
+import eu.medek.opticssimulator.logic.reflectables.Reflectable;
 import processing.core.PApplet;
 import processing.core.PVector;
 
@@ -41,14 +41,14 @@ public class VisRay extends Vis2PointObject implements VisCastable {
     }
 
     @Override
-    public void update(List<Reflactable> reflactables, PVector mouse) {
+    public void update(List<Reflectable> reflectables, PVector mouse) {
         super.update(mouse);
 
         ray.getPosition().x = start.x;
         ray.getPosition().y = start.y;
         ray.setAngle(-PVector.sub(end, start).heading());
 
-        raySolver.solveRay(ray, reflactables, REFLECT_LIMIT);
+        raySolver.solveRay(ray, reflectables, REFLECT_LIMIT);
 
         super.drawEndpoints();
     }

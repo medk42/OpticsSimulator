@@ -41,7 +41,7 @@ public class Mirror extends LineSegment {
 
             List<Ray> resultingRays = new LinkedList<>();
             Ray resultingRay = new Ray(intersection, resultingAngle, ray.getStrength());
-            resultingRay.getIgnoredReflactables().add(this);
+            resultingRay.getIgnoredReflectables().add(this);
             resultingRays.add(resultingRay);
             return new Response(intersection, this, resultingRays);
         }

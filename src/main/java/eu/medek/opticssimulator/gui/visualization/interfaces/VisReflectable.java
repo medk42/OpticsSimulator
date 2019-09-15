@@ -7,10 +7,10 @@
 
 package eu.medek.opticssimulator.gui.visualization.interfaces;
 
-import eu.medek.opticssimulator.logic.reflectables.Reflactable;
+import eu.medek.opticssimulator.logic.reflectables.Reflectable;
 import processing.core.PVector;
 
-public interface VisReflactable extends MouseListeners {
+public interface VisReflectable extends MouseListeners {
     void update(PVector mouse);
-    Reflactable getReflactable();
+    Reflectable getReflectable();
 }

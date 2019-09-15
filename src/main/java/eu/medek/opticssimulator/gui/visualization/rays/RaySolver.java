@@ -11,7 +11,7 @@ import eu.medek.opticssimulator.logic.Response;
 import eu.medek.opticssimulator.logic.Vector;
 import eu.medek.opticssimulator.logic.rays.Ray;
 import eu.medek.opticssimulator.logic.reflectables.BlockerLine;
-import eu.medek.opticssimulator.logic.reflectables.Reflactable;
+import eu.medek.opticssimulator.logic.reflectables.Reflectable;
 import processing.core.PApplet;
 import processing.core.PVector;
 
@@ -60,12 +60,12 @@ class RaySolver {
         screenEdgeBlockers.get(3).getPointB().y = screenBottomRight.y;
     }
 
-    void solveRay(Ray ray, List<Reflactable> reflactables, int limit) {
+    void solveRay(Ray ray, List<Reflectable> reflectables, int limit) {
         if (limit == 0) return;
-        Response response = ray.solveReflactables(reflactables);
+        Response response = ray.solveReflectables(reflectables);
         if (response.getImpact()) {
             drawRay((float) ray.getPosition().x, (float) ray.getPosition().y, (float) response.getPointOfImpact().x, (float) response.getPointOfImpact().y, (float) ray.getStrength() * 180);
-            response.getResultingRays().forEach(resultingRay -> solveRay(resultingRay, reflactables, limit - 1));
+            response.getResultingRays().forEach(resultingRay -> solveRay(resultingRay, reflectables, limit - 1));
         } else {
             Vector farthestIntersection = null;
             for (BlockerLine blocker : screenEdgeBlockers) {

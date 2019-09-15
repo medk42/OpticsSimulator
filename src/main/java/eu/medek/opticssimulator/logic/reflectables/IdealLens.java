@@ -105,7 +105,7 @@ public class IdealLens extends LineSegment {
             }
 
             Ray resultingRay = new Ray(intersection, beta, ray.getStrength());
-            resultingRay.getIgnoredReflactables().add(this);
+            resultingRay.getIgnoredReflectables().add(this);
             List<Ray> resultingRays = new LinkedList<>();
             resultingRays.add(resultingRay);
             return new Response(intersection, this, resultingRays);

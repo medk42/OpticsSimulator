@@ -5,36 +5,36 @@
  * Programování II (NPRG031)
  */
 
-package eu.medek.opticssimulator.gui.visualization.reflactables;
+package eu.medek.opticssimulator.gui.visualization.reflectables;
 
+import eu.medek.opticssimulator.gui.visualization.interfaces.VisReflectable;
 import eu.medek.opticssimulator.gui.visualization.prefabs.Vis2PointObject;
-import eu.medek.opticssimulator.gui.visualization.interfaces.VisReflactable;
 import eu.medek.opticssimulator.logic.Vector;
-import eu.medek.opticssimulator.logic.reflectables.IdealLens;
-import eu.medek.opticssimulator.logic.reflectables.Reflactable;
+import eu.medek.opticssimulator.logic.reflectables.IdealCurvedMirror;
+import eu.medek.opticssimulator.logic.reflectables.Reflectable;
 import processing.core.PApplet;
 import processing.core.PVector;
 
-public class VisIdealLens extends Vis2PointObject implements VisReflactable {
+public class VisIdealCurvedMirror extends Vis2PointObject implements VisReflectable {
 
     // Variables
-    private IdealLens idealLens;
+    private IdealCurvedMirror idealCurvedMirror;
 
 
     // Constructors
-    public VisIdealLens(PVector start, PVector end, PApplet pApplet, double focusDistance) {
+    public VisIdealCurvedMirror(PVector start, PVector end, PApplet pApplet, double focusDistance) {
         super(start, end, pApplet);
-        this.idealLens = new IdealLens(new Vector(start.x, start.y), new Vector(end.x, end.y), focusDistance);
+        this.idealCurvedMirror = new IdealCurvedMirror(new Vector(start.x, start.y), new Vector(end.x, end.y), focusDistance);
     }
 
 
     // Getters/Setters
     public double getFocusDistance() {
-        return idealLens.getFocusDistance();
+        return idealCurvedMirror.getFocusDistance();
     }
 
     public void setFocusDistance(double focusDistance) {
-        if (focusDistance != 0) idealLens.setFocusDistance(focusDistance);
+        if (focusDistance != 0) idealCurvedMirror.setFocusDistance(focusDistance);
     }
 
 
@@ -43,16 +43,16 @@ public class VisIdealLens extends Vis2PointObject implements VisReflactable {
     public void update(PVector mouse) {
         super.update(mouse);
 
-        idealLens.getPointA().x = start.x;
-        idealLens.getPointA().y = start.y;
-        idealLens.getPointB().x = end.x;
-        idealLens.getPointB().y = end.y;
+        idealCurvedMirror.getPointA().x = start.x;
+        idealCurvedMirror.getPointA().y = start.y;
+        idealCurvedMirror.getPointB().x = end.x;
+        idealCurvedMirror.getPointB().y = end.y;
 
         this.draw();
     }
 
     private void draw() {
-        pApplet.stroke(200);
+        pApplet.stroke(100, 100, 255);
         pApplet.line(start.x, start.y, end.x, end.y);
 
         PVector direction = PVector.sub(end, start);
@@ -60,7 +60,7 @@ public class VisIdealLens extends Vis2PointObject implements VisReflactable {
 
         direction.normalize();
         direction.rotate(PApplet.HALF_PI);
-        direction.mult((float) idealLens.getFocusDistance());
+        direction.mult((float) idealCurvedMirror.getFocusDistance());
 
         PVector focusA = PVector.add(center, direction);
         PVector focusB = PVector.sub(center, direction);
@@ -75,7 +75,7 @@ public class VisIdealLens extends Vis2PointObject implements VisReflactable {
     }
 
     @Override
-    public Reflactable getReflactable() {
-        return idealLens;
+    public Reflectable getReflectable() {
+        return idealCurvedMirror;
     }
 }

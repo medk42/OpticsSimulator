@@ -29,7 +29,7 @@ public class ManualRaysPackage extends PApplet {
 
     private Beam beam;
     private PointSource pointSource;
-    private List<Reflactable> reflactables;
+    private List<Reflectable> reflectables;
     private double density = 0.1d;
 
     private List<DensityListener> densityListeners;
@@ -43,7 +43,7 @@ public class ManualRaysPackage extends PApplet {
     }
 
     public void setup() {
-        reflactables = new ArrayList<>();
+        reflectables = new ArrayList<>();
         densityListeners = new LinkedList<>();
 
         objStart = new Vector(0,0);
@@ -56,13 +56,13 @@ public class ManualRaysPackage extends PApplet {
 
 
         //CHANGE FOR TESTING DIFFERENT COMPONENTS
-        reflactables.add(new IdealLens(objStart, objEnd, 50));
+        reflectables.add(new IdealLens(objStart, objEnd, 50));
         //END CHANGE
 
-        reflactables.add(new BlockerLine(0,0,width,0));
-        reflactables.add(new BlockerLine(10,0,10,height));
-        reflactables.add(new BlockerLine(width,height,width,0));
-        reflactables.add(new BlockerLine(width,height,0,height));
+        reflectables.add(new BlockerLine(0,0,width,0));
+        reflectables.add(new BlockerLine(10,0,10,height));
+        reflectables.add(new BlockerLine(width,height,width,0));
+        reflectables.add(new BlockerLine(width,height,0,height));
     }
 
     public void draw() {
@@ -71,15 +71,15 @@ public class ManualRaysPackage extends PApplet {
 
 
 
-        for (Reflactable reflactable : reflactables) {
-            if (reflactable instanceof IdealLens) {
-                Vector pointA = ((IdealLens) reflactable).getPointA();
-                Vector pointB = ((IdealLens) reflactable).getPointB();
+        for (Reflectable reflectable : reflectables) {
+            if (reflectable instanceof IdealLens) {
+                Vector pointA = ((IdealLens) reflectable).getPointA();
+                Vector pointB = ((IdealLens) reflectable).getPointB();
                 fill(255);
                 ellipse((float) pointA.x, (float) pointA.y, 30, 30);
                 ellipse((float) pointB.x, (float) pointB.y, 30, 30);
                 Vector center = Vector.add(pointA, Vector.sub(pointB, pointA).div(2));
-                Vector dir = Vector.sub(pointB, pointA).normalize().rotate(-Math.PI / 2).mult(((IdealLens) reflactable).getFocusDistance());
+                Vector dir = Vector.sub(pointB, pointA).normalize().rotate(-Math.PI / 2).mult(((IdealLens) reflectable).getFocusDistance());
                 Vector focus = Vector.add(center, dir);
                 Vector focus2 = Vector.sub(center, dir);
                 ellipse((float) focus.x, (float) focus.y, 8, 8);
@@ -120,7 +120,7 @@ public class ManualRaysPackage extends PApplet {
 
     private void solveRay(Ray ray, int limit) {
         if (limit == 0) return;
-        Response response = ray.solveReflactables(reflactables);
+        Response response = ray.solveReflectables(reflectables);
         if (response.getImpact()) {
             strokeWeight(2);
             stroke(200,100,100,(float) ray.getStrength()*255);
@@ -170,9 +170,9 @@ public class ManualRaysPackage extends PApplet {
     }
 
     public void mouseWheel(MouseEvent event) {
-        for (Reflactable reflactable : reflactables) {
-            if (reflactable instanceof IdealLens) {
-                IdealLens converted = (IdealLens) reflactable;
+        for (Reflectable reflectable : reflectables) {
+            if (reflectable instanceof IdealLens) {
+                IdealLens converted = (IdealLens) reflectable;
                 if (converted.getFocusDistance()+event.getCount() != 0) converted.setFocusDistance(converted.getFocusDistance()+event.getCount());
                 else converted.setFocusDistance(converted.getFocusDistance()+event.getCount()*2);
             }
