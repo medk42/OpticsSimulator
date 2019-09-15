@@ -1,3 +1,10 @@
+/*
+ * OpticsSimulator
+ * Jakub Medek, I. ročník, IOI MFF UK
+ * letní semestr 2018/19
+ * Programování II (NPRG031)
+ */
+
 package eu.medek.opticssimulator.gui.visualization.rays;
 
 import eu.medek.opticssimulator.gui.visualization.prefabs.Vis1PointObject;
